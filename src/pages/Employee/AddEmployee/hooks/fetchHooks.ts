@@ -1,39 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
+import axiosInstance from "../../../../axios/axios";
 
 const fetchRoles = async () => {
-  // Replace with real API call
-  // const res = await fetch('/api/roles');
-  // return res.json();
-  await new Promise((r) => setTimeout(r, 300));
-  return [
-    { id: 1, name: "Admin" },
-    { id: 2, name: "HR" },
-    { id: 3, name: "Recruiter" },
-    { id: 4, name: "Employee" },
-  ];
+  const res = await axiosInstance.get("/config/get-roles");
+  return res.data.data
 };
 
 const fetchBranches = async () => {
-  // Replace with real API call
-  // const res = await fetch('/api/branches');
-  // return res.json();
-  await new Promise((r) => setTimeout(r, 300));
-  return [
-    { id: 1, name: "Chennai Branch" },
-    { id: 2, name: "Bangalore Branch" },
-  ];
+  const res = await axiosInstance.get("/config/get-branches");
+  return res.data.data
 };
 
 const fetchDesignations = async () => {
-  // Replace with real API call
-  // const res = await fetch('/api/designations');
-  // return res.json();
-  await new Promise((r) => setTimeout(r, 300));
-  return [
-    { id: 1, name: "Software Engineer" },
-    { id: 2, name: "Senior Engineer" },
-    { id: 3, name: "HR Manager" },
-  ];
+  const res = await axiosInstance.get("/config/get-designations");
+  return res.data.data
 };
 
 export const useRoles = () => {

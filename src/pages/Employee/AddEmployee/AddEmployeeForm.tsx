@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Steps, notification, Spin } from "antd";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { basicInfoSchema, contactInfoSchema, jobDetailsSchema, type BasicInfoFormValues, type ContactInfoFormValues, type JobDetailsFormValues } from "../../../schemas/AddEmployee";
 import { StepBasicInfo } from "./steps/StepBasicInfo";
 import { StepJobDetails } from "./steps/StepJobDetails";
@@ -10,11 +10,6 @@ import { StepContactInfo } from "./steps/StepContactInfo";
 import { useBranches, useDesignations, useRoles } from "./hooks/fetchHooks";
 
 const { Step } = Steps;
-
-// ------------------------- Mocked fetch hooks (React Query) -------------------------
-// These hooks use react-query to fetch lists. Replace mocked fetches with real API calls.
-
-// ------------------------- Main Form Wrapper -------------------------
 
 export default function AddEmployeeForm() {
   const [current, setCurrent] = useState(0);
@@ -177,15 +172,3 @@ const steps = [
     </div>
   );
 }
-
-// ------------------------- React Query Provider (Optional wrapper) -------------------------
-// You can either wrap your app at a higher level with QueryClientProvider or use this wrapper when testing this file standalone.
-
-export const AddEmployeeFormWithProvider = () => {
-  const qc = new QueryClient();
-  return (
-    <QueryClientProvider client={qc}>
-      <AddEmployeeForm />
-    </QueryClientProvider>
-  );
-};

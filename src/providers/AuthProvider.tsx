@@ -27,7 +27,7 @@ export default function AuthProvider({ children }: AuthProvderTypes) {
     async function init() {
       try {
         setIsLoading(true);
-        const res = await axiosInstance.post("/auth/refresh"); // cookie sent because withCredentials=true
+        const res = await axiosInstance.post("/auth/refresh", {});
         const { accessToken, user } = res.data;
         if (accessToken) {
           localStorage.setItem("authToken", accessToken);

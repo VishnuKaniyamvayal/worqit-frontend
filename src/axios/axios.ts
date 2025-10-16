@@ -9,7 +9,7 @@ const axiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // needed for cookie refresh
+  withCredentials: true,
 });
 
 // Request interceptor to add auth token from localStorage

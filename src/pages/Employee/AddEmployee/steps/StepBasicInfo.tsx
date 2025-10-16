@@ -95,7 +95,7 @@ export function StepBasicInfo({
                 <Select {...field} placeholder="Select role">
                   {roles.map((r) => (
                     <Option key={r.id} value={r.id}>
-                      {r.name}
+                      {r.roleName}
                     </Option>
                   ))}
                 </Select>
@@ -121,7 +121,7 @@ export function StepBasicInfo({
                 <Select {...field} placeholder="Select branch">
                   {branches.map((b) => (
                     <Option key={b.id} value={b.id}>
-                      {b.name}
+                      {b.branchName}
                     </Option>
                   ))}
                 </Select>
@@ -145,7 +145,7 @@ export function StepBasicInfo({
                 <Select {...field} placeholder="Select designation">
                   {designations.map((d) => (
                     <Option key={d.id} value={d.id}>
-                      {d.name}
+                      {d.designationName}
                     </Option>
                   ))}
                 </Select>

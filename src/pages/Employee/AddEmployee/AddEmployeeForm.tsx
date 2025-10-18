@@ -7,7 +7,10 @@ import { basicInfoSchema, contactInfoSchema, jobDetailsSchema, type BasicInfoFor
 import { StepBasicInfo } from "./steps/StepBasicInfo";
 import { StepJobDetails } from "./steps/StepJobDetails";
 import { StepContactInfo } from "./steps/StepContactInfo";
-import { useBranches, useDesignations, useRoles } from "./hooks/fetchHooks";
+import { useBranches, useDesignations, useIdentityMaster, useRoles } from "./hooks/fetchHooks";
+import { createDynamicIdentitySchema } from "../../../utils/createDynamicSchema";
+import { IdentityDetailsStep, type identityDetailsMaster } from "./steps/IdentityDetailsStep";
+import type z from "zod";
 
 const { Step } = Steps;
 
@@ -17,6 +20,10 @@ export default function AddEmployeeForm() {
   const rolesQuery = useRoles();
   const branchesQuery = useBranches();
   const designationsQuery = useDesignations();
+  
+  // dynaimc fields
+  const identityFieldsQuery = useIdentityMaster();
+  const identityFields = identityFieldsQuery.data || []
 
   const basicMethods = useForm<BasicInfoFormValues>({
     resolver: zodResolver(basicInfoSchema),
@@ -60,6 +67,13 @@ export default function AddEmployeeForm() {
       familyDetails: "",
     },
   });
+  // Identity Details
+  const identitySchema = createDynamicIdentitySchema(identityFields as identityDetailsMaster[]);
+  const identityMethods = useForm({
+  resolver: zodResolver(identitySchema),
+  mode: "onChange",
+  });
+
 
   // Mutation: replace the async function with your real API call
   const mutation = useMutation({
@@ -83,17 +97,21 @@ export default function AddEmployeeForm() {
 
 const steps = [
   {
-    title: "Basic Information",
+    title: "Basic Details",
     description: "Enter employee identity and work details"
   },
   {
-    title: "Contact & Address",
+    title: "Work Details",
     description: "Provide communication and residence details"
   },
   {
-    title: "Review & Confirm",
+    title: "Contact Details",
     description: "Verify everything before submission"
-  }
+  },
+  { title: "Identity Details", 
+    description: 
+    "Attach required identity documents" 
+  },
 ];
 
   const onNextBasic = (
@@ -108,26 +126,36 @@ const steps = [
     setCurrent(2);
   };
 
-  const onSubmitContact = (data: ContactInfoFormValues) => {
-    // Build final payload
-    const basic = basicMethods.getValues();
-    const job = jobMethods.getValues();
-    const contact = data;
+  const onNextContact = (
+    // data
+  ) =>{
+    setCurrent(3)
+  }
 
-    const finalPayload = {
-      basicInfo: {
-        ...basic,
-        // ensure dates are ISO strings
-        dob: basic.dob ? new Date(basic.dob).toISOString() : null,
-        dateOfJoining: basic.dateOfJoining ? new Date(basic.dateOfJoining).toISOString() : null,
-        password: "123456789", // per requirement
-      },
-      jobDetails: job,
-      contactInfo: contact,
-    };
+  const onNextIdentity = ()=>{
+    setCurrent(4)
+  }
 
-    mutation.mutate(finalPayload);
-  };
+  // const onSubmitContact = (data: ContactInfoFormValues) => {
+  //   // Build final payload
+  //   const basic = basicMethods.getValues();
+  //   const job = jobMethods.getValues();
+  //   const contact = data;
+
+  //   const finalPayload = {
+  //     basicInfo: {
+  //       ...basic,
+  //       // ensure dates are ISO strings
+  //       dob: basic.dob ? new Date(basic.dob).toISOString() : null,
+  //       dateOfJoining: basic.dateOfJoining ? new Date(basic.dateOfJoining).toISOString() : null,
+  //       password: "123456789", // per requirement
+  //     },
+  //     jobDetails: job,
+  //     contactInfo: contact,
+  //   };
+
+  //   mutation.mutate(finalPayload);
+  // };
 
   // Loading or error handling for select lists
   const loading = rolesQuery.isLoading || branchesQuery.isLoading || designationsQuery.isLoading;
@@ -165,7 +193,13 @@ const steps = [
 
         {current === 2 && (
           <FormProvider {...contactMethods}>
-            <StepContactInfo methods={contactMethods} onNext={onSubmitContact} onBack={() => setCurrent(1)} />
+            <StepContactInfo methods={contactMethods} onNext={onNextContact} onBack={() => setCurrent(1)} />
+          </FormProvider>
+        )}
+
+        {current === 3 && (
+          <FormProvider {...identityMethods}>
+            <IdentityDetailsStep identityFields={identityFields}  methods={identityMethods} onNext={onNextIdentity} onBack={() => setCurrent(2)} />
           </FormProvider>
         )}
       </div>

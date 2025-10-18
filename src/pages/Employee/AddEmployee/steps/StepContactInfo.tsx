@@ -187,7 +187,7 @@ export function StepContactInfo({
       <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
         <Button onClick={onBack}>Back</Button>
         <Button type="primary" htmlType="submit" disabled={!formState.isValid}>
-          Submit
+          Next
         </Button>
       </div>
     </Form>

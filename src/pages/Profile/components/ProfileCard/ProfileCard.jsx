@@ -1,7 +1,7 @@
 import { Button, Card, Divider, Typography } from "antd";
 import Title from "antd/es/typography/Title";
 import { FaUserEdit } from "react-icons/fa";
-import BGIMAGE from "../../../assets/9547197.jpg"
+import BGIMAGE from "../../../../assets/9547197.jpg"
 
 const { Text } = Typography;
 
@@ -11,7 +11,6 @@ const ProfileCard = () => {
       style={{
         borderRadius: "16px",
         overflow: "hidden",
-        boxShadow: "0 8px 20px rgba(0,0,0,0.12)",
       }}
       bodyStyle={{ padding: 0 }}
     >

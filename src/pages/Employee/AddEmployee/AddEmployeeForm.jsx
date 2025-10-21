@@ -91,8 +91,8 @@ export default function AddEmployeeForm() {
       ADMethods.reset();
       setCurrent(0);
     },
-    onError: () => {
-      api.error({ message: "Failed to create user", placement: "topRight" });
+    onError: (error) => {
+      api.error({ message: error.response.data.message ? error.response.data.message :  "Failed to create user", placement: "topRight" });
     },
   });
 
@@ -171,7 +171,7 @@ export default function AddEmployeeForm() {
         )}
         {current === 4 && (
           <FormProvider {...ADMethods}>
-            <ADDetailsStep adFields={ADFields} methods={ADMethods} onNext={onSubmitAD} onBack={() => setCurrent(2)} />
+            <ADDetailsStep createUserLoading={mutation.isPending} adFields={ADFields} methods={ADMethods} onNext={onSubmitAD} onBack={() => setCurrent(2)} />
           </FormProvider>
         )}
       </div>

@@ -1,14 +1,9 @@
-import type { PropsWithChildren } from "react";
 import { useAuth } from "../providers/AuthProvider";
 import Loader from "./Loader";
 import { Navigate, Outlet } from "react-router-dom";
 import PermissionDenied from "./PermissionDenied";
 
-type ProtectedRouteProps = PropsWithChildren & {
-  allowedRoles?: string[];
-};
-
-export default function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) {
+export default function ProtectedRoute({ children, allowedRoles }) {
   const { currentUser ,isLoading } = useAuth();
 
   if (isLoading) return <Loader />;
@@ -16,7 +11,7 @@ export default function ProtectedRoute({ children, allowedRoles }: ProtectedRout
   if (!currentUser) {
     return <Navigate to="/login" replace />;
   }
-  if (allowedRoles && !allowedRoles.includes((currentUser as any).role)) {
+  if (allowedRoles && !allowedRoles.includes((currentUser).role)) {
     return <PermissionDenied />;
   }
 

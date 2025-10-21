@@ -2,7 +2,7 @@ import { Button, Form, Input, Select, DatePicker, Row, Col } from "antd";
 import { Controller } from "react-hook-form";
 import dayjs from "dayjs";
 
-export function ADDetailsStep({ methods, adFields, onNext, onBack }) {
+export function ADDetailsStep({ methods, adFields, onNext, onBack, createUserLoading }) {
   const { handleSubmit, control, formState } = methods;
   const { errors } = formState;
 
@@ -71,8 +71,8 @@ export function ADDetailsStep({ methods, adFields, onNext, onBack }) {
             Back
           </Button>
         )}
-        <Button type="primary" htmlType="submit">
-          Next
+        <Button loading={createUserLoading} type="primary" htmlType="submit">
+          Create User
         </Button>
       </div>
     </Form>

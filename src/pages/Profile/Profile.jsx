@@ -1,22 +1,20 @@
-import { Col, Row } from "antd"
-import ProfileCard from "./components/ProfileCard"
+import ProfileCard from "./components/ProfileCard/ProfileCard"
+import ProfileTabs from "./components/Tabs/ProfileTabs"
 
 const Profile = () => {
   return (
     <div>
-        {/* User Basic Card + Edit Details Button + button click opens drawer form */}
-        <Row>
-            {/* User basic card */}
-            <Col span={7}>
-                <ProfileCard />
-            </Col>
-            {/* User Other details */}
-            <Col span={17}>
-            </Col>
-        </Row>
-        {/* LEFT SIDE: Quick Details */}
+      {/* User Basic Card + Edit Details Button + button click opens drawer form */}
+      <div className="grid grid-cols-4 gap-3">
+        <div className="col-span-4 sm:col-span-1">
+          <ProfileCard />
+        </div>
+        <div className="col-span-4 sm:col-span-3">
+          <ProfileTabs />
+        </div>
         {/* RIGHT SIDE: Details like attendance in tabs */}
-        {/* Other Main stuff */}
+      </div>
+      {/* Other Main stuff */}
     </div>
   )
 }

@@ -1,15 +1,10 @@
-import type { ContactInfoFormValues } from "../../../../schemas/AddEmployee";
 import { Button, Form, Input, Row, Col } from "antd";
-import { useForm, Controller } from "react-hook-form";
+import { Controller } from "react-hook-form";
 
 export function StepContactInfo({
   methods,
   onNext,
   onBack,
-}: {
-  methods: ReturnType<typeof useForm<ContactInfoFormValues>>;
-  onNext: (data: ContactInfoFormValues) => void;
-  onBack: () => void;
 }) {
   const { handleSubmit, control, formState } = methods;
 
@@ -25,7 +20,7 @@ export function StepContactInfo({
                 label="Mobile Number"
                 required
                 validateStatus={formState.errors.mobileNumber ? "error" : ""}
-                help={formState.errors.mobileNumber?.message as any}
+                help={formState.errors.mobileNumber?.message}
               >
                 <Input {...field} />
               </Form.Item>
@@ -41,7 +36,7 @@ export function StepContactInfo({
               <Form.Item
                 label="Emergency Phone"
                 validateStatus={formState.errors.emergencyPhone ? "error" : ""}
-                help={formState.errors.emergencyPhone?.message as any}
+                help={formState.errors.emergencyPhone?.message}
               >
                 <Input {...field} />
               </Form.Item>
@@ -58,7 +53,7 @@ export function StepContactInfo({
                 label="House Number"
                 required
                 validateStatus={formState.errors.houseNumber ? "error" : ""}
-                help={formState.errors.houseNumber?.message as any}
+                help={formState.errors.houseNumber?.message}
               >
                 <Input {...field} />
               </Form.Item>
@@ -75,7 +70,7 @@ export function StepContactInfo({
                 label="Street Name"
                 required
                 validateStatus={formState.errors.streetName ? "error" : ""}
-                help={formState.errors.streetName?.message as any}
+                help={formState.errors.streetName?.message}
               >
                 <Input {...field} />
               </Form.Item>
@@ -91,7 +86,7 @@ export function StepContactInfo({
               <Form.Item
                 label="Landmark"
                 validateStatus={formState.errors.landmark ? "error" : ""}
-                help={formState.errors.landmark?.message as any}
+                help={formState.errors.landmark?.message}
               >
                 <Input {...field} />
               </Form.Item>
@@ -108,7 +103,7 @@ export function StepContactInfo({
                 label="District"
                 required
                 validateStatus={formState.errors.district ? "error" : ""}
-                help={formState.errors.district?.message as any}
+                help={formState.errors.district?.message}
               >
                 <Input {...field} />
               </Form.Item>
@@ -125,7 +120,7 @@ export function StepContactInfo({
                 label="State"
                 required
                 validateStatus={formState.errors.state ? "error" : ""}
-                help={formState.errors.state?.message as any}
+                help={formState.errors.state?.message}
               >
                 <Input {...field} />
               </Form.Item>
@@ -142,7 +137,7 @@ export function StepContactInfo({
                 label="Country"
                 required
                 validateStatus={formState.errors.country ? "error" : ""}
-                help={formState.errors.country?.message as any}
+                help={formState.errors.country?.message}
               >
                 <Input {...field} />
               </Form.Item>
@@ -159,7 +154,7 @@ export function StepContactInfo({
                 label="Pincode"
                 required
                 validateStatus={formState.errors.pincode ? "error" : ""}
-                help={formState.errors.pincode?.message as any}
+                help={formState.errors.pincode?.message}
               >
                 <Input {...field} />
               </Form.Item>
@@ -175,7 +170,7 @@ export function StepContactInfo({
               <Form.Item
                 label="Family Details"
                 validateStatus={formState.errors.familyDetails ? "error" : ""}
-                help={formState.errors.familyDetails?.message as any}
+                help={formState.errors.familyDetails?.message}
               >
                 <Input.TextArea {...field} rows={4} />
               </Form.Item>

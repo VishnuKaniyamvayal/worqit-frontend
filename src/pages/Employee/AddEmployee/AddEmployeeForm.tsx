@@ -7,15 +7,18 @@ import { basicInfoSchema, contactInfoSchema, jobDetailsSchema, type BasicInfoFor
 import { StepBasicInfo } from "./steps/StepBasicInfo";
 import { StepJobDetails } from "./steps/StepJobDetails";
 import { StepContactInfo } from "./steps/StepContactInfo";
-import { useBranches, useDesignations, useIdentityMaster, useRoles } from "./hooks/fetchHooks";
-import { createDynamicIdentitySchema } from "../../../utils/createDynamicSchema";
+import { useADMaster, useBranches, useDesignations, useIdentityMaster, useRoles } from "./hooks/fetchHooks";
+import { createDynamicADSchema, createDynamicIdentitySchema } from "../../../utils/createDynamicSchema";
 import { IdentityDetailsStep, type identityDetailsMaster } from "./steps/IdentityDetailsStep";
-import type z from "zod";
+import { ADDetailsStep, type adDetailsMaster } from "./steps/ADDetailsStep";
+import axiosInstance from "../../../axios/axios";
 
 const { Step } = Steps;
 
 export default function AddEmployeeForm() {
   const [current, setCurrent] = useState(0);
+  const [identityData, setIdentityData] = useState([]);
+  const [api, contextHolder] = notification.useNotification();
 
   const rolesQuery = useRoles();
   const branchesQuery = useBranches();
@@ -24,6 +27,10 @@ export default function AddEmployeeForm() {
   // dynaimc fields
   const identityFieldsQuery = useIdentityMaster();
   const identityFields = identityFieldsQuery.data || []
+
+  // dynaimc fields
+  const ADFieldsQuery = useADMaster();
+  const ADFields = ADFieldsQuery.data || []
 
   const basicMethods = useForm<BasicInfoFormValues>({
     resolver: zodResolver(basicInfoSchema),
@@ -74,43 +81,50 @@ export default function AddEmployeeForm() {
   mode: "onChange",
   });
 
+  // Additional Details
+  const ADSchema = createDynamicADSchema(ADFields as adDetailsMaster[]);
+  const ADMethods = useForm({
+  resolver: zodResolver(ADSchema),
+  mode: "onChange",
+  });
+
 
   // Mutation: replace the async function with your real API call
   const mutation = useMutation({
   mutationFn: async (payload: any) => {
-    // Mock: simulate network delay
-    await new Promise((r) => setTimeout(r, 800));
+    await axiosInstance.post("/admin/create-user",payload)
     return { success: true };
   },
   onSuccess: () => {
-    notification.success({ message: "User created successfully" });
+    api.success({ message: "User created successfully", placement:"topRight" });
     // reset all forms
     basicMethods.reset();
     jobMethods.reset();
     contactMethods.reset();
+    identityMethods.reset();
+    ADMethods.reset();
     setCurrent(0);
   },
   onError: () => {
-    notification.error({ message: "Failed to create user" });
+    api.error({ message: "Failed to create user", placement:"topRight" });
   }
 });
 
 const steps = [
   {
-    title: "Basic Details",
-    description: "Enter employee identity and work details"
+    title: "Basic Info",
   },
   {
-    title: "Work Details",
-    description: "Provide communication and residence details"
+    title: "Job Info",
   },
   {
-    title: "Contact Details",
-    description: "Verify everything before submission"
+    title: "Contact Info"
   },
-  { title: "Identity Details", 
-    description: 
-    "Attach required identity documents" 
+  { 
+    title: "Identity Info",
+  },
+  { 
+    title: "Additional Info", 
   },
 ];
 
@@ -132,30 +146,31 @@ const steps = [
     setCurrent(3)
   }
 
-  const onNextIdentity = ()=>{
+  const onNextIdentity = (data:any)=>{
+    setIdentityData(data);
     setCurrent(4)
   }
 
-  // const onSubmitContact = (data: ContactInfoFormValues) => {
-  //   // Build final payload
-  //   const basic = basicMethods.getValues();
-  //   const job = jobMethods.getValues();
-  //   const contact = data;
+  const onSubmitAD = (data: any) => {
+  const basic = basicMethods.getValues();
+  const job = jobMethods.getValues();
+  const contact = contactMethods.getValues();
+  const additional = data;
 
-  //   const finalPayload = {
-  //     basicInfo: {
-  //       ...basic,
-  //       // ensure dates are ISO strings
-  //       dob: basic.dob ? new Date(basic.dob).toISOString() : null,
-  //       dateOfJoining: basic.dateOfJoining ? new Date(basic.dateOfJoining).toISOString() : null,
-  //       password: "123456789", // per requirement
-  //     },
-  //     jobDetails: job,
-  //     contactInfo: contact,
-  //   };
-
-  //   mutation.mutate(finalPayload);
-  // };
+  const finalPayload = {
+    basicDetails: {
+      ...basic,
+      dob: basic.dob ? new Date(basic.dob).toISOString() : null,
+      dateOfJoining: basic.dateOfJoining ? new Date(basic.dateOfJoining).toISOString() : null,
+      password: "123456789",
+      weekOff: job.weekOff
+    },
+    contactInfo: contact,
+    identityDetails: identityData, // <-- use formatted identity array
+    additionalDetails: additional,
+  };
+  mutation.mutate(finalPayload);
+};
 
   // Loading or error handling for select lists
   const loading = rolesQuery.isLoading || branchesQuery.isLoading || designationsQuery.isLoading;
@@ -172,6 +187,7 @@ const steps = [
 
   return (
     <div style={{ maxWidth: 900, margin: "0 auto" }}>
+      {contextHolder}
       <Steps current={current} style={{ marginBottom: 24 }}>
         {steps.map((s) => (
           <Step key={s.title} title={s.title} />
@@ -200,6 +216,11 @@ const steps = [
         {current === 3 && (
           <FormProvider {...identityMethods}>
             <IdentityDetailsStep identityFields={identityFields}  methods={identityMethods} onNext={onNextIdentity} onBack={() => setCurrent(2)} />
+          </FormProvider>
+        )}
+        {current === 4 && (
+          <FormProvider {...ADMethods}>
+            <ADDetailsStep adFields={ADFields}  methods={ADMethods} onNext={onSubmitAD} onBack={() => setCurrent(2)} />
           </FormProvider>
         )}
       </div>

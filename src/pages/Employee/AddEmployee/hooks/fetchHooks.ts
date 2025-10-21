@@ -20,6 +20,15 @@ const fetchIdentityMaster = async () => {
   return res.data.data
 };
 
+const fetchADMaster = async () => {
+  const res = await axiosInstance.get("/config/get-additional-m");
+  return res.data.data
+};
+
+export const useADMaster = () => {
+  return useQuery({ queryKey: ["ADMaster"], queryFn: fetchADMaster, staleTime: 1000 * 60 * 5,});
+};
+
 export const useRoles = () => {
   return useQuery({ queryKey: ["roles"], queryFn: fetchRoles, staleTime: 1000 * 60 * 5,});
 };

@@ -2,36 +2,16 @@ import { Button, Form, Input, Upload, Row, Col } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { Controller } from "react-hook-form";
 
-export type identityDetailsMaster = {
-  id: number;
-  idName: string;
-  country: string;
-  isRequired: boolean;
-  isAttachmentRequired: boolean;
-  branchId: number;
-};
-
-export function IdentityDetailsStep({
-  methods,
-  identityFields,
-  onNext,
-  onBack,
-}: {
-  methods: any; // identityMethods from useForm
-  identityFields: identityDetailsMaster[];
-  onNext: (data: any[]) => void;
-  onBack?: () => void;
-}) {
+export function IdentityDetailsStep({ methods, identityFields, onNext, onBack }) {
   const { handleSubmit, control, formState } = methods;
   const { errors } = formState;
 
-  const submit = (formData: Record<string, any>) => {
+  const submit = (formData) => {
     const formatted = identityFields.map((f) => ({
       identityMasterId: f.id,
       value: formData[`value_${f.id}`] || "",
       attachment: formData[`attachment_${f.id}`] || null,
     }));
-
     onNext(formatted);
   };
 
@@ -40,7 +20,6 @@ export function IdentityDetailsStep({
       <Row gutter={16}>
         {identityFields.map((f) => (
           <Col span={12} key={f.id}>
-            {/* ID VALUE INPUT */}
             <Controller
               name={`value_${f.id}`}
               control={control}
@@ -57,7 +36,6 @@ export function IdentityDetailsStep({
               )}
             />
 
-            {/* ATTACHMENT INPUT */}
             <Controller
               name={`attachment_${f.id}`}
               control={control}

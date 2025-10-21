@@ -22,11 +22,10 @@ export default function MainLayout() {
               borderRadius: borderRadiusLG,
             }}
           >
-            {/* Render children (routes) */}
             <Outlet />
           </div>
         </Content>
       </Layout>
     </Layout>
   );
-};
+}

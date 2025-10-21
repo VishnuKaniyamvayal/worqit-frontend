@@ -10,7 +10,7 @@ const { Title, Text } = Typography;
 const Login = () => {
   const { handleLogin, isLoading } = useAuth();
   const navigate = useNavigate();
-  const onFinish = async (values:{email:string,password:string}) => {
+  const onFinish = async (values) => {
    const success = await handleLogin({ email: values.email, password: values.password });
     if (success) {
       navigate("/"); // only navigate on success

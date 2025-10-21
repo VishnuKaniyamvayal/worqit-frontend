@@ -1,30 +1,15 @@
-
 import { Button, Form, Input, Select, DatePicker, Row, Col } from "antd";
 import dayjs from "dayjs";
-import { useForm, Controller } from "react-hook-form";
-import type { BasicInfoFormValues } from "../../../../schemas/AddEmployee";
+import { Controller } from "react-hook-form";
 
 const { Option } = Select;
 
-export function StepBasicInfo({
-  methods,
-  roles,
-  branches,
-  designations,
-  onNext,
-}: {
-  methods: ReturnType<typeof useForm<BasicInfoFormValues>>;
-  roles: any[];
-  branches: any[];
-  designations: any[];
-  onNext: (data: BasicInfoFormValues) => void;
-}) {
+export function StepBasicInfo({ methods, roles, branches, designations, onNext }) {
   const { handleSubmit, control, formState } = methods;
 
   return (
     <Form layout="vertical" onFinish={handleSubmit(onNext)}>
       <Row gutter={16}>
-        {/* Employee ID */}
         <Col span={12}>
           <Controller
             name="employeeId"
@@ -34,15 +19,18 @@ export function StepBasicInfo({
                 label="Employee ID"
                 required
                 validateStatus={formState.errors.employeeId ? "error" : ""}
-                help={formState.errors.employeeId?.message as any}
+                help={formState.errors.employeeId?.message}
               >
-                <Input {...field} type="number" onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)} />
+                <Input
+                  {...field}
+                  type="number"
+                  onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)}
+                />
               </Form.Item>
             )}
           />
         </Col>
 
-        {/* Email */}
         <Col span={12}>
           <Controller
             name="email"
@@ -52,7 +40,7 @@ export function StepBasicInfo({
                 label="Email"
                 required
                 validateStatus={formState.errors.email ? "error" : ""}
-                help={formState.errors.email?.message as any}
+                help={formState.errors.email?.message}
               >
                 <Input {...field} />
               </Form.Item>
@@ -62,7 +50,6 @@ export function StepBasicInfo({
       </Row>
 
       <Row gutter={16}>
-        {/* Employee Name */}
         <Col span={12}>
           <Controller
             name="employeeName"
@@ -72,7 +59,7 @@ export function StepBasicInfo({
                 label="Employee Name"
                 required
                 validateStatus={formState.errors.employeeName ? "error" : ""}
-                help={formState.errors.employeeName?.message as any}
+                help={formState.errors.employeeName?.message}
               >
                 <Input {...field} />
               </Form.Item>
@@ -80,7 +67,6 @@ export function StepBasicInfo({
           />
         </Col>
 
-        {/* Role */}
         <Col span={12}>
           <Controller
             name="roleId"
@@ -90,7 +76,7 @@ export function StepBasicInfo({
                 label="Role"
                 required
                 validateStatus={formState.errors.roleId ? "error" : ""}
-                help={formState.errors.roleId?.message as any}
+                help={formState.errors.roleId?.message}
               >
                 <Select {...field} placeholder="Select role">
                   {roles.map((r) => (
@@ -106,7 +92,6 @@ export function StepBasicInfo({
       </Row>
 
       <Row gutter={16}>
-        {/* Branch */}
         <Col span={12}>
           <Controller
             name="branchId"
@@ -116,7 +101,7 @@ export function StepBasicInfo({
                 label="Branch"
                 required
                 validateStatus={formState.errors.branchId ? "error" : ""}
-                help={formState.errors.branchId?.message as any}
+                help={formState.errors.branchId?.message}
               >
                 <Select {...field} placeholder="Select branch">
                   {branches.map((b) => (
@@ -130,7 +115,6 @@ export function StepBasicInfo({
           />
         </Col>
 
-        {/* Designation */}
         <Col span={12}>
           <Controller
             name="designationId"
@@ -140,7 +124,7 @@ export function StepBasicInfo({
                 label="Designation"
                 required
                 validateStatus={formState.errors.designationId ? "error" : ""}
-                help={formState.errors.designationId?.message as any}
+                help={formState.errors.designationId?.message}
               >
                 <Select {...field} placeholder="Select designation">
                   {designations.map((d) => (
@@ -156,7 +140,6 @@ export function StepBasicInfo({
       </Row>
 
       <Row gutter={16}>
-        {/* Blood Group */}
         <Col span={12}>
           <Controller
             name="bloodGroup"
@@ -166,7 +149,7 @@ export function StepBasicInfo({
                 label="Blood Group"
                 required
                 validateStatus={formState.errors.bloodGroup ? "error" : ""}
-                help={formState.errors.bloodGroup?.message as any}
+                help={formState.errors.bloodGroup?.message}
               >
                 <Input {...field} />
               </Form.Item>
@@ -174,7 +157,6 @@ export function StepBasicInfo({
           />
         </Col>
 
-        {/* Timezone */}
         <Col span={12}>
           <Controller
             name="timezone"
@@ -184,7 +166,7 @@ export function StepBasicInfo({
                 label="Timezone"
                 required
                 validateStatus={formState.errors.timezone ? "error" : ""}
-                help={formState.errors.timezone?.message as any}
+                help={formState.errors.timezone?.message}
               >
                 <Select {...field} placeholder="Select timezone">
                   <Option value="Asia/Kolkata">Asia/Kolkata</Option>
@@ -197,7 +179,6 @@ export function StepBasicInfo({
       </Row>
 
       <Row gutter={16}>
-        {/* DOB */}
         <Col span={12}>
           <Controller
             name="dob"
@@ -207,7 +188,7 @@ export function StepBasicInfo({
                 label="Date of Birth"
                 required
                 validateStatus={formState.errors.dob ? "error" : ""}
-                help={formState.errors.dob?.message as any}
+                help={formState.errors.dob?.message}
               >
                 <DatePicker
                   value={field.value ? dayjs(field.value) : undefined}
@@ -219,7 +200,6 @@ export function StepBasicInfo({
           />
         </Col>
 
-        {/* Date of Joining */}
         <Col span={12}>
           <Controller
             name="dateOfJoining"
@@ -229,7 +209,7 @@ export function StepBasicInfo({
                 label="Date of Joining"
                 required
                 validateStatus={formState.errors.dateOfJoining ? "error" : ""}
-                help={formState.errors.dateOfJoining?.message as any}
+                help={formState.errors.dateOfJoining?.message}
               >
                 <DatePicker
                   value={field.value ? dayjs(field.value) : undefined}

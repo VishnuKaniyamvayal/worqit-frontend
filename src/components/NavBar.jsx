@@ -1,4 +1,4 @@
-import { Flex, Menu, type MenuProps, } from "antd";
+import { Flex, Menu } from "antd";
 import Sider from "antd/es/layout/Sider";
 import React, { useState, useContext } from "react";
 import LOGO from "../assets/worqit-logo.png";
@@ -15,7 +15,7 @@ import { CgProfile } from "react-icons/cg";
 import { FiUsers } from "react-icons/fi";
 import { Link, useLocation } from "react-router-dom";
 
-const siderStyle: React.CSSProperties = {
+const siderStyle = {
   overflow: "auto",
   height: "100vh",
   position: "sticky",
@@ -26,15 +26,7 @@ const siderStyle: React.CSSProperties = {
 
 const UserContext = React.createContext({ role: "admin" }); // Replace later
 
-interface AppMenuItem {
-  key: string;
-  label: string;
-  icon?: React.ReactNode;
-  roles: string[];
-  children?: AppMenuItem[];
-}
-
-const MENU_CONFIG: AppMenuItem[] = [
+const MENU_CONFIG = [
   {
     key: "/",
     label: "Dashboard",
@@ -75,22 +67,21 @@ const MENU_CONFIG: AppMenuItem[] = [
   },
 ];
 
-const filterMenuByRole = (items: AppMenuItem[], role: string): MenuProps["items"] => {
+const filterMenuByRole = (items, role) => {
   return items
     .filter((item) => item.roles.includes(role))
     .map((item) => {
       const hasChildren = item.children && item.children.length > 0;
-      
       return {
         key: item.key,
         icon: item.icon,
         label: hasChildren ? item.label : <Link to={item.key}>{item.label}</Link>,
-        children: hasChildren ? filterMenuByRole(item.children!, role) : undefined,
+        children: hasChildren ? filterMenuByRole(item.children, role) : undefined,
       };
     });
 };
 
-const NavBar: React.FC = () => {
+const NavBar = () => {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
   const { role } = useContext(UserContext);

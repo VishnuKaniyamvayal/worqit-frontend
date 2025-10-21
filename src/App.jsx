@@ -5,26 +5,28 @@ import MainLayout from "./components/MainLayout";
 import Home from "./pages/Home/Home";
 import NotFound from "./components/NotFound";
 import Profile from "./pages/Profile/Profile";
-import AddEmployee from "./pages/Employee/AddEmployee/";
+import AddEmployee from "./pages/Employee/AddEmployee";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <ProtectedRoutes allowedRoles={["admin"]}>
-        <MainLayout />
-      </ProtectedRoutes>,
+      element: (
+        <ProtectedRoutes allowedRoles={["admin"]}>
+          <MainLayout />
+        </ProtectedRoutes>
+      ),
       children: [
         {
           index: true,
           element: <Home />,
         },
         {
-          path:"/add-employee",
+          path: "/add-employee",
           element: <AddEmployee />,
         },
         {
-          path:"/profile",
+          path: "/profile",
           element: <Profile />,
         },
       ],
@@ -33,10 +35,10 @@ function App() {
       path: "/login",
       element: <Login />,
     },
-     {
-    path: "*", // catch-all for anything not matched
-    element: <NotFound />,
-  },
+    {
+      path: "*",
+      element: <NotFound />,
+    },
   ]);
 
   return <RouterProvider router={router} />;

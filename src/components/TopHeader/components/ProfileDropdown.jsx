@@ -1,13 +1,13 @@
 // ProfileDropdown.tsx
 import avatarImage from "../../../assets/avatar-placeholder.avif";
-import { Avatar, Dropdown, Flex, type MenuProps } from "antd";
+import { Avatar, Dropdown, Flex } from "antd";
 import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import { useAuth } from "../../../providers/AuthProvider";
 
 const ProfileDropdown = () => {
   const { handleLogout } = useAuth();
 
-  const items: MenuProps["items"] = [
+  const items = [
     {
       key: "1",
       label: "My Profile",
@@ -23,7 +23,7 @@ const ProfileDropdown = () => {
     },
   ];
 
-  const onClick: MenuProps["onClick"] = ({ key }) => {
+  const onClick = ({ key }) => {
     if (key === "2") handleLogout();
   };
 

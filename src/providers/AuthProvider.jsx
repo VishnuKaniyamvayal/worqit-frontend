@@ -1,29 +1,18 @@
-import { createContext, useContext, useEffect, useState, type PropsWithChildren } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import axiosInstance from "../axios/axios";
 import { message } from "antd";
-// TODO Add user instead of record
-type AuthContext = {
-    authToken?: string | null;
-    currentUser?: Object | null;
-    handleLogin: (creds:{email:string,password:string}) => Promise<boolean>;
-    handleLogout: () => void;
-    isLoading: boolean;
-}
 
+const AuthContext = createContext(undefined);
 
-const AuthContext = createContext<AuthContext | undefined>(undefined);
-
-type AuthProvderTypes = PropsWithChildren
-
-export default function AuthProvider({ children }: AuthProvderTypes) {
-    const [authToken, setAuthToken] = useState<string | null>(() => localStorage.getItem("authToken"));
-    const [currentUser, setCurrentUser] = useState(() => {
+export default function AuthProvider({ children }) {
+  const [authToken, setAuthToken] = useState(() => localStorage.getItem("authToken"));
+  const [currentUser, setCurrentUser] = useState(() => {
     const raw = localStorage.getItem("currentUser");
     return raw ? JSON.parse(raw) : null;
   });
-    const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
+  useEffect(() => {
     async function init() {
       try {
         setIsLoading(true);
@@ -41,7 +30,6 @@ export default function AuthProvider({ children }: AuthProvderTypes) {
           setCurrentUser(null);
         }
       } catch (err) {
-        // no refresh available — user not logged in
         localStorage.removeItem("authToken");
         localStorage.removeItem("currentUser");
         setAuthToken(null);
@@ -53,8 +41,7 @@ export default function AuthProvider({ children }: AuthProvderTypes) {
     init();
   }, []);
 
-  
-  async function handleLogin(creds: { email: string; password: string }): Promise<boolean> {
+  async function handleLogin(creds) {
     try {
       setIsLoading(true);
       const res = await axiosInstance.post("/auth/login", creds);
@@ -69,7 +56,7 @@ export default function AuthProvider({ children }: AuthProvderTypes) {
       } else {
         throw new Error("Server Error");
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error("Login failed", err);
       message.error(err.response?.data?.message || "Login failed");
       localStorage.removeItem("authToken");
@@ -85,7 +72,7 @@ export default function AuthProvider({ children }: AuthProvderTypes) {
   async function handleLogout() {
     try {
       setIsLoading(true);
-      await axiosInstance.post("/auth/logout"); // backend will clear cookie & server store
+      await axiosInstance.post("/auth/logout");
     } catch (err) {
       console.warn("Logout API failed", err);
     } finally {
@@ -98,17 +85,19 @@ export default function AuthProvider({ children }: AuthProvderTypes) {
     }
   }
 
-    return <AuthContext.Provider
-        value={{
-            authToken,
-            currentUser,
-            handleLogin,
-            handleLogout,
-            isLoading,
-        }}
+  return (
+    <AuthContext.Provider
+      value={{
+        authToken,
+        currentUser,
+        handleLogin,
+        handleLogout,
+        isLoading,
+      }}
     >
-        {children}
+      {children}
     </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {

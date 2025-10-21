@@ -1,9 +1,9 @@
-import AddEmployeeForm from "./AddEmployeeForm"
-import { Typography } from 'antd';
+import AddEmployeeForm from "./AddEmployeeForm";
+import { Typography } from "antd";
 
 const { Title } = Typography;
 
-const index = () => {
+const Index = () => {
   return (
     <div>
       <div style={{ textAlign: "left", marginBottom: "30px", marginLeft: "50px" }}>
@@ -11,7 +11,7 @@ const index = () => {
       </div>
       <AddEmployeeForm />
     </div>
-  )
-}
+  );
+};
 
-export default index
+export default Index;

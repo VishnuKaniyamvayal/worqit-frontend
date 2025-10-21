@@ -110,8 +110,3 @@ export const contactInfoSchema = z.object({
     .optional()
     .or(z.literal("")),
 });
-
-// Types
-export type BasicInfoFormValues = z.infer<typeof basicInfoSchema>;
-export type JobDetailsFormValues = z.infer<typeof jobDetailsSchema>;
-export type ContactInfoFormValues = z.infer<typeof contactInfoSchema>;

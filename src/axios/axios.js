@@ -1,4 +1,3 @@
-// src/axios/axios.ts
 import axios from "axios";
 import { message } from "antd";
 
@@ -12,7 +11,6 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-// Request interceptor to add auth token from localStorage
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("authToken");
@@ -24,13 +22,10 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor: bubble errors up; optionally show toast for some statuses
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    // keep generic messaging here; do NOT force navigation
     if (error.response?.status === 401) {
-      // Let AuthProvider detect 401 via thrown error and handle logout
       message.error("Session expired. Please login again.");
     } else if (error.response?.status >= 500) {
       message.error("Server error. Try again later.");
